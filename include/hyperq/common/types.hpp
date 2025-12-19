@@ -28,3 +28,5 @@ struct FetchResponse{
     uint64_t consumer_lag;  // how far behind is the consumer
     string error_messages;  // if any
 };
+
+// this encloses the data types structure in our project
