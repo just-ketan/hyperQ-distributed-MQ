@@ -2,10 +2,11 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+using namespace std;
 
 int main(int argc, char* argv[]) {
     int broker_id = 1;
-    std::string log_dir = "/tmp/hyperq";
+    string log_dir = "/tmp/hyperq";
     
     // Parse command-line arguments
     if (argc > 1) {
@@ -15,9 +16,9 @@ int main(int argc, char* argv[]) {
         log_dir = argv[2];
     }
     
-    std::cout << "Starting HyperQ Broker\n";
-    std::cout << "  Broker ID: " << broker_id << "\n";
-    std::cout << "  Log Directory: " << log_dir << "\n\n";
+    cout << "Starting HyperQ Broker\n";
+    cout << "  Broker ID: " << broker_id << "\n";
+    cout << "  Log Directory: " << log_dir << "\n\n";
     
     try {
         Broker broker(broker_id, log_dir);
@@ -27,16 +28,16 @@ int main(int argc, char* argv[]) {
         broker.create_topic("payments", 4, 1);
         broker.create_topic("events", 2, 1);
         
-        std::cout << "\n✓ Broker ready for connections\n";
-        std::cout << "Press Ctrl+C to stop\n\n";
+        cout << "\n✓ Broker ready for connections\n";
+        cout << "Press Ctrl+C to stop\n\n";
         
         // Keep broker running
         while (true) {
             broker.print_status();
-            std::this_thread::sleep_for(std::chrono::seconds(30));
+            this_thread::sleep_for(std::chrono::seconds(30));
         }
     } catch (const std::exception& e) {
-        std::cerr << "Broker error: " << e.what() << "\n";
+        cerr << "Broker error: " << e.what() << "\n";
         return 1;
     }
     
