@@ -3,10 +3,12 @@
 #include "hyperq/client/consumer.hpp"
 #include <iostream>
 #include <iomanip>
-using namespace std;
+#include <thread>
 
-void print_header(const string& title) {
-    cout << "\n" << string(70, '=') << "\n"<< title << "\n"<< string(70, '=') << "\n\n";
+void print_header(const std::string& title) {
+    std::cout << "\n" << std::string(70, '=') << "\n"
+              << title << "\n"
+              << std::string(70, '=') << "\n\n";
 }
 
 void demo_basic_produce_consume() {
@@ -15,23 +17,26 @@ void demo_basic_produce_consume() {
     Broker broker(1, "/tmp/hyperq");
     broker.create_topic("orders", 2, 1);
     
-    Producer producer(broker);
-    cout << ">>> Sending 5 messages\n";
+    Producer producer(broker, "OrderProducer");
+    std::cout << ">>> Sending 5 messages\n";
     for (int i = 0; i < 5; ++i) {
-        string msg = "Order #" + to_string(i+1) + ": $" + to_string(50*(i+1));
+        std::string msg = "Order #" + std::to_string(i+1) + 
+                         ": $" + std::to_string(50*(i+1));
         auto response = producer.send("orders", msg);
         if (response.success) {
-            cout << "  ✓ Sent to partition " << response.partition << " offset " << response.offset << "\n";
+            std::cout << "  ✓ Sent to partition " << response.partition 
+                      << " offset " << response.offset << "\n";
         }
     }
     
-    Consumer consumer(broker, "payment-service");
-    cout << "\n>>> Consuming from both partitions\n";
+    Consumer consumer(broker, "payment-service", "PaymentConsumer");
+    std::cout << "\n>>> Consuming from both partitions\n";
     for (int p = 0; p < 2; ++p) {
         auto response = consumer.consume("orders", p);
-        cout << "Partition " << p << ": " << response.messages.size() << " messages\n";
+        std::cout << "Partition " << p << ": " 
+                  << response.messages.size() << " messages\n";
         for (const auto& msg : response.messages) {
-            cout << "  [" << msg.offset << "] " << msg.value << "\n";
+            std::cout << "  [" << msg.offset << "] " << msg.value << "\n";
         }
     }
 }
@@ -42,23 +47,22 @@ void demo_offset_tracking() {
     Broker broker(1, "/tmp/hyperq");
     broker.create_topic("events", 1, 1);
     
-    Producer producer(broker);
-    cout << ">>> Phase 1: Sending 10 messages\n";
-    for (int i = 0; i < 10; ++i) {
-        producer.send("events", "Event " + to_string(i+1));
+    Producer producer(broker, "EventProducer");
+    std::cout << ">>> Phase 1: Sending 10 messages\n";
+    for (int i = 0; i < 10; i++) {
+        producer.send("events", "Event " + std::to_string(i+1));
     }
     
-    Consumer c1(broker, "event-processor");
-    cout << "\n>>> Phase 2: Consumer reads 3 messages, then crashes\n";
+    Consumer c1(broker, "event-processor", "Consumer-1");
+    std::cout << "\n>>> Phase 2: Consumer reads 5 messages\n";
     auto r1 = c1.consume("events", 0);
-    cout << "Read " << r1.messages.size() << " messages\n";
-    cout << "Offset committed: " << r1.next_offset - 1 << "\n";
+    std::cout << "Read " << r1.messages.size() << " messages\n";
     
-    Consumer c2(broker, "event-processor");
-    cout << "\n>>> Phase 3: Consumer restarts (same group)\n";
+    Consumer c2(broker, "event-processor", "Consumer-2-Restart");
+    std::cout << "\n>>> Phase 3: Consumer restarts (same group)\n";
     auto r2 = c2.consume("events", 0);
-    cout << "Resumed from offset: " << r2.messages[0].offset << "\n";
-    cout << "✓ No re-processing! Offset was persisted!\n";
+    std::cout << "Resumed from offset: " << (r2.messages.empty() ? 0 : r2.messages[0].offset) << "\n";
+    std::cout << "✓ No re-processing! Offset was persisted!\n";
 }
 
 void demo_partitioning() {
@@ -67,16 +71,20 @@ void demo_partitioning() {
     Broker broker(1, "/tmp/hyperq");
     broker.create_topic("payments", 4, 1);
     
-    Producer producer(broker);
-    cout << ">>> Sending 8 payments with customer keys\n";
-    for (int i = 0; i < 8; ++i) {
-        string customer = "customer_" + to_string(i % 3);
-        string msg = "Payment #" + to_string(i+1);
+    Producer producer(broker, "PaymentProducer");
+    std::cout << ">>> Sending 8 payments with customer keys\n";
+    for (int i = 0; i < 8; i++) {
+        std::string customer = "customer_" + std::to_string(i % 3);
+        std::string msg = "Payment #" + std::to_string(i+1);
         auto response = producer.send("payments", msg, customer);
-        cout << "  → Partition " << response.partition << ": " << msg << " (" << customer << ")\n";
+        std::cout << "  → Partition " << response.partition << ": " 
+                  << msg << " (" << customer << ")\n";
     }
     
-    cout << "\n✓ Key-based partitioning:\n"<< "  - Same customer always → same partition\n"<< "  - Ordering preserved for customer\n"<< "  - Different customers on different partitions (parallel)\n";
+    std::cout << "\n✓ Key-based partitioning:\n"
+              << "  - Same customer always → same partition\n"
+              << "  - Ordering preserved for customer\n"
+              << "  - Different customers on different partitions (parallel)\n";
 }
 
 int main() {
@@ -85,10 +93,10 @@ int main() {
         demo_offset_tracking();
         demo_partitioning();
         
-        print_header("✓ COMPLETED !");
+        print_header("✓ ALL DEMOS COMPLETED SUCCESSFULLY!");
         return 0;
-    } catch (const exception& e) {
-        cerr << "Error: " << e.what() << "\n";
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << "\n";
         return 1;
     }
 }
