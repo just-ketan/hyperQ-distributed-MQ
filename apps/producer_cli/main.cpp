@@ -2,6 +2,7 @@
 #include "hyperq/client/producer.hpp"
 #include <iostream>
 #include <string>
+using namespace std;
 
 int main(int argc, char* argv[]){
     string log_dir = "/tmp/hyperq";
