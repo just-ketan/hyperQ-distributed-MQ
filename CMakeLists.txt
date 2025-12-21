@@ -1,28 +1,14 @@
 cmake_minimum_required(VERSION 3.10)
-project(MessageQueue)
+project(hyperQ VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra -Wpedantic")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -DNDEBUG")
 
-# Compiler flags
-if(MSVC)
-    add_compile_options(/W4)
-else()
-    add_compile_options(-Wall -Wextra -pedantic -std=c++17)
-endif()
+find_package(Threads REQUIRED)
+include_directories(include)
 
-# Include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
-# Create executable
-add_executable(message_queue_demo 
-    main.cpp
-    commitlog.hpp
-    partition.hpp
-    consumer_group.hpp
-    broker.hpp
-    producer.hpp
-)
-
-# Link libraries
-target_link_libraries(message_queue_demo PRIVATE pthread)
+add_subdirectory(src)
+add_subdirectory(apps)
+enable_testing()
+add_subdirectory(tests)
