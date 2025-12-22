@@ -1,0 +1,38 @@
+# Build artifacts
+build/
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Test artifacts
+test-results/
+*.log
+
+# Temporary files
+*.tmp
+/tmp/
+.temp/
+
+# Dependencies
+third-party/
+vendor/
+
+# Output files
+*.out
+*.bin
