@@ -18,7 +18,7 @@ struct Message{
     string to_string() const;
 };
 
-struct ProduceRespoonse{
+struct ProduceResponse{
     bool success;
     string topic;
     int partition;
