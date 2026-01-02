@@ -2,8 +2,12 @@
 #include <iostream>
 #include <sstream>
 #include <cstring>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
-CommitLog::CommitLog(const string& log_dir) : log_dir_(log_dir), current_offset_(0){
+CommitLog::CommitLog(const string& log_dir)
+    : log_dir_(log_dir), current_offset_(0){
     mkdir(log_dir_.c_str(), 0755);
 }
 

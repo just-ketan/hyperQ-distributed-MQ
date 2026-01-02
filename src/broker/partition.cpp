@@ -1,5 +1,6 @@
 #include "hyperq/broker/partition.hpp"
 #include <iostream>
+#include <shared_mutex>
 using namespace std;
 
 Partition::Partition(const string& topic, int partition_id, int broker_id, bool is_leader, shared_ptr<CommitLog> commit_log):topic_(topic), partition_id_(partition_id),broker_id_(broker_id),is_leader_(is_leader),commit_log_(commit_log),high_watermark_(0){
