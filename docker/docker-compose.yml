@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  broker1:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.broker
+    environment:
+      - BROKER_ID=1
+    volumes:
+      - broker1_data:/var/log/hyperq
+    ports:
+      - "9092:9092"
+
+  broker2:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.broker
+    environment:
+      - BROKER_ID=2
+    volumes:
+      - broker2_data:/var/log/hyperq
+    ports:
+      - "9093:9092"
+
+  broker3:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.broker
+    environment:
+      - BROKER_ID=3
+    volumes:
+      - broker3_data:/var/log/hyperq
+    ports:
+      - "9094:9092"
+
+volumes:
+  broker1_data:
+  broker2_data:
+  broker3_data:
