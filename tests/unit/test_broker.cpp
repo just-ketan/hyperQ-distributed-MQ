@@ -1,6 +1,7 @@
 #include "hyperq/broker/broker.hpp"
 #include <cassert>
 #include <iostream>
+using namespace std;
 
 void test_create_topic(){
     cout<<" Test to create topic \n";
