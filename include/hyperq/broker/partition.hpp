@@ -3,6 +3,7 @@
 #include "hyperq/common/types.hpp"
 #include <memory>
 #include <shared_mutex>
+#include <mutex>
 #include <vector>
 #include <stdexcept>
 #include <iostream>
