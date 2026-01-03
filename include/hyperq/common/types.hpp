@@ -24,7 +24,7 @@ struct ProduceResponse{
     int partition;
     uint64_t offset;    // assigned offset
     string error_message;
-    ProduceRespoonse();
+    ProduceResponse();
     string to_string() const;
 };
 
