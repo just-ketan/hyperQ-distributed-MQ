@@ -39,11 +39,9 @@ struct FetchResponse{
     uint64_t consumer_lag;  // how far behind is the consumer
     string error_message;  // if any
     FetchResponse(bool s = false,
-                  const std::string& t = "",
-                  int p = -1,
-                  const std::vector<std::string>& m = {},
-                  const std::string& e = "")
-        : success(s), topic(t), partition(p), messages(m), error_message(e) {}
+                  const vector<Message>& m = {},
+                  const string& e = "")
+        : success(s), messages(m), error_message(e) {}
     size_t message_count() const;
     string to_string() const;
 };

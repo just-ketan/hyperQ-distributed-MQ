@@ -19,8 +19,8 @@ string Message::to_string() const {
 }
 
 // ProduceResponse implementations
-ProduceResponse::ProduceResponse() 
-    : success(false), partition(-1), offset(0) {}
+// ProduceResponse::ProduceResponse() 
+//     : success(false), partition(-1), offset(0) {}
 
 string ProduceResponse::to_string() const {
     return "ProduceResponse{success=" + std::string(success ? "true" : "false") 
