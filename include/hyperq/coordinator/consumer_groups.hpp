@@ -78,22 +78,22 @@ class ConsumerGroupCoordinator{
 
         // leave consumer group
         // removes "consumer from group and triggers erbalancing" and "remove assosciated offest commits for this consumer"
-        void leave_group(const string& group_id, const string& consummer_id){
+        void leave_group(const string& group_id, const string& member_id){
             lock_guard<mutex> lock(mutex_);
 
             auto group_it = group_members_.find(group_id);
             if(group_it == group_members_.end()){
                 throw invalid_argument("Group " + group_id +" doest not exist");
             }
-            auto consumer_it = group_it->second.find(consumer_id);
+            auto consumer_it = group_it->second.find(member_id);
             if(consumer_it == group_it->second.end()){
-                throw invalid_argument("Consumer "+consumer_id+" does not exist in "+group_id);
+                throw invalid_argument("Consumer "+member_id+" does not exist in "+group_id);
             }
 
-            group_it->second.erasse(consumer_it);
+            group_it->second.erase(consumer_it);
 
             if(group_it->second.empty())    group_members_.erase(group_it); // no consumers left
-            cout<<"Consumer "<<consumer_id<<" left group "<<group_id<<"\n";
+            cout<<"Consumer "<<member_id<<" left group "<<group_id<<"\n";
         }
 
         //get consumer group size
@@ -151,7 +151,7 @@ class ConsumerGroupCoordinator{
                 }
             }
 
-            auto offests_it = offsets_.find(group_id);
+            auto offsets_it = offsets_.find(group_id);
             if(offsets_it != offsets_.end()){
                 cout<<" Offsets: \n";
                 for(const auto& [topic, partitions] : offsets_it->second){
@@ -162,7 +162,7 @@ class ConsumerGroupCoordinator{
             }
         }
     private:
-        map<sring, map<string, map<int, uint64_t>>> offsets_;
+        map<string, map<string, map<int, uint64_t>>> offsets_;
             // {group_id: {topic: {partition: offset}}}
         map<string, map<string, vector<string>>> group_members_;
             // {group_id: {consumer_id: {topics}}}
