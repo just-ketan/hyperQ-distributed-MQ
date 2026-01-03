@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <algorithm>
+using namespace std;
 
 class ConsumerGroupCoordinator{
     public:
