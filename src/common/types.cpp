@@ -13,7 +13,7 @@ Message::Message(uint64_t offset, const string& key, const string& value, int pa
     timestamp = chrono::system_clock::now().time_since_epoch().count();
 }
 
-string Message::to_string() const {
+string Message::format_string() const {
     return "Message{offset=" + to_string(offset) + ", key=" + key + ", value=" + value 
            + ", partition=" + to_string(partition) + ", timestamp=" + to_string(timestamp) + "}";
 }
@@ -22,7 +22,7 @@ string Message::to_string() const {
 ProduceResponse::ProduceResponse() 
     : success(false), partition(-1), offset(0) {}
 
-string ProduceResponse::to_string() const {
+string ProduceResponse::format_string() const {
     return "ProduceResponse{success=" + string(success ? "true" : "false") 
            + ", topic=" + topic + ", partition=" + to_string(partition) 
            + ", offset=" + to_string(offset) + ", error=" + error_message + "}";
@@ -32,7 +32,7 @@ string ProduceResponse::to_string() const {
 OffsetCommitResponse::OffsetCommitResponse() 
     : succcess(false) {}
 
-string OffsetCommitResponse::to_string() const {
+string OffsetCommitResponse::format_string() const {
     return "OffsetCommitResponse{success=" + string(succcess ? "true" : "false") 
            + ", error=" + error_message + "}";
 }
