@@ -24,8 +24,12 @@ struct ProduceResponse{
     int partition;
     uint64_t offset;    // assigned offset
     string error_message;
-    ProduceResponse();
-    string to_string() const;
+    ProduceResponse(bool s = false,
+                    const std::string& t = "",
+                    int p = -1,
+                    uint64_t o = 0,
+                    const std::string& e = "")
+        : success(s), topic(t), partition(p), offset(o), error_message(e) {}    string to_string() const;
 };
 
 struct FetchResponse{
@@ -34,7 +38,12 @@ struct FetchResponse{
     uint64_t next_offset;   // next offset to fetch
     uint64_t consumer_lag;  // how far behind is the consumer
     string error_message;  // if any
-    FetchResponse();
+    FetchResponse(bool s = false,
+                  const std::string& t = "",
+                  int p = -1,
+                  const std::vector<std::string>& m = {},
+                  const std::string& e = "")
+        : success(s), topic(t), partition(p), messages(m), error_message(e) {}
     size_t message_count() const;
     string to_string() const;
 };
