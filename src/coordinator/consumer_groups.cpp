@@ -1,4 +1,4 @@
-#include "hyper1/coordinator/consumer_groups.hpp"
+#include "hyperq/coordinator/consumer_groups.hpp"
 #include <iostream>
 
 void ConsumerGroupCoordinator::commit_offset(const string& group_id, const string& topic, int partition, uint64_t offset){
