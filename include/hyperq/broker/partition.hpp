@@ -42,7 +42,7 @@ public:
         }
 
         // Write to commit log with fsync (inside CommitLog::append)
-        uint64_t offset = commit_log_->append(topic_, partition_id_, message);
+        uint64_t offset = commit_log_->append(topic_, message, partition_id_);
         high_watermark_ = offset;
         return offset;
     }
