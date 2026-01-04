@@ -9,9 +9,9 @@ void test_append_and_read() {
     CommitLog log("/tmp/hyperq-test");
     
     // Append messages
-    uint64_t offset1 = log.append("test-topic", 0, "message1");
-    uint64_t offset2 = log.append("test-topic", 0, "message2");
-    uint64_t offset3 = log.append("test-topic", 0, "message3");
+    uint64_t offset1 = log.append("test-topic", "message1", 0);
+    uint64_t offset2 = log.append("test-topic", "message2", 0);
+    uint64_t offset3 = log.append("test-topic", "message3", 0);
     
     assert(offset1 == 0);
     assert(offset2 == 1);
@@ -32,9 +32,9 @@ void test_read_from_offset() {
     
     CommitLog log("/tmp/hyperq-test");
     
-    log.append("offset-test", 0, "msg0");
-    log.append("offset-test", 0, "msg1");
-    log.append("offset-test", 0, "msg2");
+    log.append("offset-test", "msg0", 0);
+    log.append("offset-test", "msg1", 0);
+    log.append("offset-test", "msg2", 0);
     
     auto messages = log.read("offset-test", 0, 1, 10);
     assert(messages.size() == 2);
@@ -48,10 +48,10 @@ void test_multiple_partitions() {
     
     CommitLog log("/tmp/hyperq-test");
     
-    log.append("multi", 0, "p0-msg1");
-    log.append("multi", 1, "p1-msg1");
-    log.append("multi", 0, "p0-msg2");
-    log.append("multi", 1, "p1-msg2");
+    log.append("multi", "p0-msg1", 0);
+    log.append("multi", "p1-msg1", 1);
+    log.append("multi", "p0-msg2", 0);
+    log.append("multi", "p1-msg2", 1);
     
     auto p0_msgs = log.read("multi", 0, 0, 10);
     auto p1_msgs = log.read("multi", 1, 0, 10);
