@@ -39,7 +39,7 @@ int main(int argc, char* argv[]){
                 cout<< "Invalid partition or error: "<<e.what()<<"\n";
             }
         }
-        cout<<"\n Consumer Stats: "<<consumer.get_consumer_count()<<" messages consumed from group "<<group_id<<"\n";
+        cout<<"\n Consumer Stats: "<<consumer.get_consumer_count_()<<" messages consumed from group "<<group_id<<"\n";
         return 0;
     }catch (const exception& e){
         cerr<<"Error: "<<e.what()<<"\n";

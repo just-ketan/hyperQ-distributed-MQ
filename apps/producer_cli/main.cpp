@@ -2,6 +2,7 @@
 #include "hyperq/client/producer.hpp"
 #include <iostream>
 #include <string>
+#include <sstream>
 using namespace std;
 
 int main(int argc, char* argv[]){
@@ -10,7 +11,7 @@ int main(int argc, char* argv[]){
     try{
         Broker broker(1, log_dir);
         broker.create_topic("cli-topic", 3,1);
-        Producer Producer(broker, "CLIProducer");
+        Producer producer(broker, "CLIProducer");
         cout<<"hyperQ Producer CLI \n Enter Messages (quit to exit) \n Format: message [key] \n\n";
         string line;
         while(getline(cin, line)){

@@ -38,18 +38,18 @@ class Consumer{
 
         // consume from multiple partition
         int consume_partitions(const string& topic, const vector<int>& partitions){
-            int consumed_count = 0;
+            int consumer_count_ = 0;
             for(int partition : partitions){
                 auto response = consume(topic, partition);
                 if(response.success){
-                    consumed_count+=response.messages.size();
+                    consumer_count_+=response.messages.size();
                 }
             }
-            return consumed_count;
+            return consumer_count_;
         }
 
-        int get_consumed_count() const {
-            return consumed_count;
+        int get_consumer_count_() const {
+            return consumer_count_;
         }
         string get_name() const {
             return name_;
