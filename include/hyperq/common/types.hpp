@@ -34,18 +34,22 @@ struct ProduceResponse{
 
 struct FetchResponse{
     bool success;
-    vector<Message> messages;
     string topic;
     int partition;
-    uint64_t next_offset;   // next offset to fetch
-    uint64_t consumer_lag;  // how far behind is the consumer
-    string error_message;  // if any
+    vector messages;
+    uint64_t next_offset;
+    uint64_t consumer_lag;
+    string error_message;
+    
     FetchResponse(bool s = false,
                   const string& t = "",
                   int p = -1,
                   const vector<Message>& m = {},
                   const string& e = "")
-        : success(s), topic(t), partition(p), messages(m), error_message(e) {}
+        : success(s), topic(t), partition(p), 
+          messages(m), next_offset(0), 
+          consumer_lag(0), error_message(e) {}
+    
     size_t message_count() const;
     string to_string() const;
 };

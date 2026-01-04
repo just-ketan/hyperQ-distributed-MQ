@@ -118,20 +118,20 @@ public:
         // Check if topic exists
         auto topic_it = topics_.find(topic);
         if (topic_it == topics_.end()) {
-            return FetchResponse{
-                false, {}, 0, 0,
+            return FetchResponse(
+                false, topic, partition, {},
                 "Topic " + topic + " does not exist"
-            };
+            );
         }
 
         auto& partitions = topic_it->second;
 
         // Check if partition exists
         if (partition >= partitions.size()) {
-            return FetchResponse{
-                false, {}, 0, 0,
+            return FetchResponse(
+                false, topic, partition, {},
                 "Partition " + to_string(partition) + " does not exist"
-            };
+            );
         }
 
         Partition* part = partitions[partition].get();
@@ -159,14 +159,14 @@ public:
             uint64_t next_offset = messages.empty() ? offset : messages.back().offset + 1;
             uint64_t lag = part->get_high_watermark() > offset ? part->get_high_watermark() - offset : 0;
 
-            return FetchResponse{
-                true, messages, next_offset, lag, ""
-            };
+            return FetchResponse(
+                true, topic, partition, messages, ""
+            );
         } catch (const exception& e) {
-            return FetchResponse{
-                false, {}, 0, 0,
+            return FetchResponse(
+                false, topic, partition, {},
                 "Read failed: " + string(e.what())
-            };
+            );
         }
     }
 
