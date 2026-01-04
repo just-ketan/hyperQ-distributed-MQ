@@ -9,12 +9,12 @@ using namespace std;
 // Customer : client that reads from broker
 class Consumer{
     public:
-        explicit Consumer(Broker& broker, const string& group_id, const string& name="Consumer") : broker_(broker), group_id_(group_id), name_(name), consumed_count_(0){
+        explicit Consumer(Broker& broker, const string& group_id, const string& name="Consumer") : broker_(broker), group_id_(group_id), name_(name), consumer_count_(0){
             cout<<"["<<name_<<"] Started in group: "<<group_id_<<"\n";
         }
 
-        !Consumer(){
-            cout<<"["<<name_<<"] Stopeed. Consumed: "<<consumed_count_<<" messages\n";
+        ~Consumer(){
+            cout<<"["<<name_<<"] Stopeed. Consumed: "<<consumer_count_<<" messages\n";
         }
 
         // consume messages from partition (last commit offset)
@@ -24,7 +24,7 @@ class Consumer{
             (void)max_messages; // broker uses fixed batch so unused rn
             FetchResponse response = broker_.consume(topic, partition, group_id_, 0);
             if(response.success){
-                consumed_count_ += response.messages.size();
+                consumer_count_ += response.messages.size();
                 cout<<"["<<name_<<"] Consumed from "<< topic<<":"<<partition<<" count "<< response.messages.size()<<"\n";
 
                 for(const auto& msg : response.messages){
@@ -63,11 +63,11 @@ class Consumer{
             return broker_.get_coordinator().get_offset(group_id_, topic, partition);
         }
         uint64_t get_lag(const string& topic, int partition, uint64_t latest_offset){
-            return broker_.get_coordinator().get_consumer_lag(group_id, topic, partition, latest_offset);
+            return broker_.get_coordinator().get_consumer_lag(group_id_, topic, partition, latest_offset);
         }
     private:
         Broker& broker_;
         string group_id_;
         string name_;
-        int consumed_count;
+        size_t consumer_count_;
 };
