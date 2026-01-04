@@ -36,7 +36,7 @@ struct FetchResponse{
     bool success;
     string topic;
     int partition;
-    vector messages;
+    vector<Message> messages;
     uint64_t next_offset;
     uint64_t consumer_lag;
     string error_message;
