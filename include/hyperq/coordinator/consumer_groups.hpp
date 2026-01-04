@@ -157,7 +157,7 @@ class ConsumerGroupCoordinator{
                 cout<<" Offsets: \n";
                 for(const auto& [topic, partitions] : offsets_it->second){
                     for(const auto& [partition, offset] : partitions){
-                        cout<"   - "<<topic<<":"<<partition<<"->"<<offset<<"\n";
+                        cout<<"   - "<<topic<<":"<<partition<<"->"<<offset<<"\n";
                     }
                 }
             }
