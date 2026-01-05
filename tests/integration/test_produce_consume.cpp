@@ -28,8 +28,8 @@ void test_multiple_producers_consumers(){
     Producer p1(broker, "p1");
     Producer p2(broker, "p2");
     for(int i=0; i<5; i++){
-        p1.send("multi-p1-msg"+to_string(i));
-        p2.send("multi-p2-msg"+to_string(i));
+        p1.send("multi","multi-p1-msg"+to_string(i));
+        p2.send("multi","multi-p2-msg"+to_string(i));
     }
 
     Consumer c1(broker, "multi-group", "c1");
